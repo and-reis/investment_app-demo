@@ -149,6 +149,7 @@ def manager_buy_transaction(
 ):
     """
     Allows a manager to perform a buy transaction for a client.
+    
     Parameters
     ----------
     data : PortfolioBuyRequest
