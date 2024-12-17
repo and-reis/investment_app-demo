@@ -157,3 +157,24 @@ class UserService:
             A list of users who are clients managed by the given manager.
         """
         return session.query(User).filter_by(manager_id=manager_id, role="client").all()
+    
+    @staticmethod
+    def is_client_of_manager(client_id: int, manager_id: int, session: Session) -> bool:
+        """
+        Verifies if a client belongs to a specific manager.
+        
+        Parameters
+        ----------
+        client_id : int
+            The ID of the client.
+        manager_id : int
+            The ID of the manager.        
+        session : sqlalchemy.orm.Session
+            The database session.
+        
+        Returns
+        -------
+        Boolean value
+        """
+        client = session.query(User).filter_by(user_id=client_id, manager_id=manager_id).first()
+        return bool(client)

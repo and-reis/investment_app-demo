@@ -39,7 +39,7 @@ class PortfolioService:
     MINIMUM_INVESTMENT = Decimal("10.0")
 
     @staticmethod
-    def add_transaction(data: dict, session: Session) -> Portfolio:
+    def add_transaction(data: dict, session: Session, client_id: int = None) -> Portfolio:
         """
         Registers a buy or sell transaction in the portfolio.
 
@@ -60,6 +60,10 @@ class PortfolioService:
         ValueError
             If the transaction type is invalid.
         """
+
+        user_id = client_id if client_id else data["user_id"]  # Default to the current user
+        data["user_id"] = user_id
+
         if data.get("trade_type") == "buy":
             data_trade = PortfolioBuyRequestInternal(**data)
             return PortfolioService._handle_buy(data_trade, session, PortfolioService.FEE_RATE)

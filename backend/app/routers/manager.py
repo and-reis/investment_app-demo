@@ -15,7 +15,9 @@ from sqlalchemy.orm import Session
 from sqlalchemy import func
 from typing import List
 from app.services.portfolio import PortfolioService
+from app.services.user import UserService
 from app.models import Portfolio, User
+from app.schemas.portfolio import PortfolioBuyRequest, PortfolioSellRequest
 from app.dependencies import get_current_user, get_db_session
 
 router = APIRouter()
@@ -138,22 +140,82 @@ def get_client_pnl(session: Session = Depends(get_db_session), user=Depends(get_
     
     return result
 
-@router.post("/trade_by_manager", summary="On-holding: Trade by manager")
-def trade_by_manager():
+@router.post("/manager/buy")
+def manager_buy_transaction(
+    data: PortfolioBuyRequest,
+    client_id: int,
+    session: Session = Depends(get_db_session),
+    user=Depends(get_current_user)
+):
     """
-    Placeholder for a future feature allowing managers to trade on behalf of clients.
-
-    Status
-    ------
-    On-holding: This endpoint is not yet implemented.
-
-    Notes
-    -----
-    This feature will allow managers to leverage their expertise to execute trades for clients directly.
+    Allows a manager to perform a buy transaction for a client.
+    Parameters
+    ----------
+    data : PortfolioBuyRequest
+        The buy transaction details.
+    client_id: int
+        Id of client in wallet manager
+    session : sqlalchemy.orm.Session
+        The database session.
+    user : dict
+        The current manager authenticated user.
 
     Returns
     -------
-    dict
-        A message indicating the endpoint is on hold.
+    PortfolioTransactionResponse
+        The details of the created transaction.
+
+    Raises
+    ------
+    HTTPException
+        If the transaction cannot be processed due to validation errors.        
     """
-    return {"message": "This feature is on-holding and will be implemented soon."}
+    if user["role"] != "manager":
+        raise HTTPException(status_code=403, detail="Only managers can perform this action.")
+
+    # Validate that the client belongs to the manager
+    if not UserService.is_client_of_manager(client_id, user["user_id"], session):
+        raise HTTPException(status_code=403, detail="Client does not belong to this manager.")
+
+    return PortfolioService.add_transaction(data.dict(), session, client_id=client_id)
+
+
+@router.post("/manager/sell")
+def manager_sell_transaction(
+    data: PortfolioSellRequest,
+    client_id: int,
+    session: Session = Depends(get_db_session),
+    user=Depends(get_current_user)
+):
+    """
+    Allows a manager to perform a sell transaction for a client.
+
+    Parameters
+    ----------
+    data : PortfolioBuyRequest
+        The buy transaction details.
+    client_id: int
+        Id of client in wallet manager
+    session : sqlalchemy.orm.Session
+        The database session.
+    user : dict
+        The current manager authenticated user.
+
+    Returns
+    -------
+    PortfolioTransactionResponse
+        The details of the created transaction.
+
+    Raises
+    ------
+    HTTPException
+        If the transaction cannot be processed due to validation errors.        
+    """
+    if user["role"] != "manager":
+        raise HTTPException(status_code=403, detail="Only managers can perform this action.")
+
+    # Validate that the client belongs to the manager
+    if not UserService.is_client_of_manager(client_id, user["user_id"], session):
+        raise HTTPException(status_code=403, detail="Client does not belong to this manager.")
+
+    return PortfolioService.add_transaction(data.dict(), session, client_id=client_id)
