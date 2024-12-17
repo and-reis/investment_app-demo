@@ -1,0 +1,37 @@
+services:
+  invest_app:    
+    container_name: cntappinvest
+    build : .    
+    environment:
+      - PYTHONPATH=/home      
+      - EXECUTION_MODE=prod  # Define execution mode: prod/test/dev
+      - IS_DOCKER="true"     # Indicates the app is running in a container
+    ports:
+      - "8000:8000"
+    networks:
+      - devnetwork
+    volumes:
+      - ./backend:/home      # Sync local code with container   
+    env_file:
+      - .env
+    depends_on:
+      - srvdbinvest
+            
+  srvdbinvest:
+    image: postgres:15.3-alpine
+    container_name: cntdbinvest
+    environment:
+      POSTGRES_USER: appuser
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: invest_db
+    ports:
+      - "5432:5432"
+    networks:
+      - devnetwork      
+    volumes: 
+        - ./volumes/db_data:/var/lib/postgresql/data # Database persistence
+        - ./volumes/sqlscripts:/docker-entrypoint-initdb.d # Initialize database
+
+networks:
+  devnetwork:
+    driver: bridge

@@ -1,0 +1,7 @@
+# Bytes-compiled files
+__pycache__/
+.pytest_cache/
+.spyproject/
+
+# Datafiles from database Volume
+volumes/db_data/

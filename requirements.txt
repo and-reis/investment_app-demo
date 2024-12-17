@@ -1,0 +1,12 @@
+APScheduler==3.11.0         #Library for scheduling jobs in Python
+ccxt==4.4.38                #A cryptocurrency trading library that supports multiple exchange APIs for real-time market data and trading automation
+email_validator==2.2.0      #Library for validating email addresses
+fastapi==0.115.6            #Framework for building APIs with automatic data validation and integrated documentation
+numpy==2.2.0                #Library for numerical computing
+passlib==1.7.4              #Library for securely hashing and verifying passwords
+psycopg2-binary==2.9.10     #PostgreSQL database adapter for Python
+pydantic==2.10.3            #A data validation library that enforces type checking and schema definitions for Python objects
+pytest==8.3.4               #A robust testing framework for Python
+SQLAlchemy==2.0.36          #SQL toolkit and Object-Relational Mapping (ORM) library for Python
+uvicorn[standard]==0.32.1   #Lightweight and fast ASGI server for running FastAPI
+python-decouple==3.8        #Library for managing environment variables and configuration settings
