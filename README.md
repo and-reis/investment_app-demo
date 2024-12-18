@@ -31,16 +31,26 @@ This application includes the following core features:
 
 2. **Portfolio Management**:  
    - Track assets in a portfolio with details like current value, cost basis, and asset allocation.  
-   - Perform **buy** and **sell** operations, with automatic calculations of profit/loss.  
+   - Perform **buy** and **sell** operations, with automatic calculations of profit/loss.
+   - Support for both absolute quantity and percentage-based selling.  
 
 3. **Profit and Loss (PnL) Tracking**:  
    - Real-time updates on investment performance, including historical comparisons.  
 
 4. **Price Integration**:  
-   - Integration with the Binance API to fetch real-time and historical market data.  
+   - Integration with the Binance API to fetch real-time and historical market data.
 
-5. **Environment Separation**:  
+5. **Manager Operations**:
+   - Enables managers to trade on behalf of their clients:
+     - **Buy Transactions**: Execute buy orders for any client under the manager's supervision.
+     - **Sell Transactions**: Execute sell orders for clients, specifying either quantity or percentage of holdings.
+   - Comprehensive validation ensures client-manager relationships and prevents unauthorized actions.
+
+6. **Environment Separation**:  
    - Clear separation between development, testing, and production environments, ensuring secure and reliable workflows.
+
+7. **API Documentation**:
+   - Auto-generated documentation available via Swagger UI.
 
 ---
 
